@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mlflow-server:
+    image: ghcr.io/mlflow/mlflow:v2.12.1
+    ports:
+      - "5000:5000"
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=sqlite:////mlflow/mlflow.db
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlflow-artifacts
+    command: mlflow server --backend-store-uri sqlite:////mlflow/mlflow.db --default-artifact-root /mlflow-artifacts --host 0.0.0.0 --port 5000
+    volumes:
+      - mlflow-db-data:/mlflow
+      - mlflow-artifacts-data:/mlflow-artifacts
+    networks:
+      - traductor-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+
+  app-traductor:
+    # Reemplaza 'tu_usuario' con tu nombre de usuario de Docker Hub
+    image: app-traductor:1.0.0
+    ports:
+      - "7860:7860"
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow-server:5000
+      - API_KEY=${API_KEY}
+    networks:
+      - traductor-net
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+
+volumes:
+  mlflow-db-data:
+  mlflow-artifacts-data:
+
+networks:
+  traductor-net:
+    driver: overlay
+
