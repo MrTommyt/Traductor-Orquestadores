@@ -22,7 +22,7 @@ services:
 
   app-traductor:
     # Reemplaza 'tu_usuario' con tu nombre de usuario de Docker Hub
-    image: app-traductor:1.0.0
+    image: mrtommyt/app-traductor:1.0.0
     ports:
       - "7860:7860"
     environment:

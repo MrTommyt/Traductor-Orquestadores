@@ -1,5 +1,8 @@
 # Taller: App de Traducción Orquestada con Docker Compose y Swarm
 
+![mlflow_screenshot](screenshots/Screenshot_2025-11-25-16-03-08_3652.png)
+![gradio_screenshot](screenshots/Screenshot_2025-11-25-16-03-38_26284.png)
+
 ## Arquitectura
 La aplicación consta de dos servicios principales:
 1.  **app-traductor**: Aplicación Python que utiliza Gradio para la interfaz de usuario y llama a la API de OpenAI (u otro proveedor compatible) para traducir texto. Registra métricas y artefactos en MLflow.
